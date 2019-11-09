@@ -1,4 +1,4 @@
-# FFXIV-BeautiyTemplate
+# [FFXIV-BeautiyTemplate](https://github.com/chenshiai/beautify-template)
 
 ## Project setup
 ```
