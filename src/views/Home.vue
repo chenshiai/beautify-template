@@ -19,7 +19,7 @@
           <svg class="combtant-damage" viewBox='15 15 70 70' xmlns='http://www.w3.org/2000/svg'>
             <use xlink:href='#percent' :style='style(item.damageP)' />
           </svg>
-          <img class='job' :src="`../../icons/${item.Job.toLowerCase()}.png`" />
+          <img class='job' :src="`../beautify-template/dist/icons/${item.Job.toLowerCase()}.png`" />
           <span class="damageP">{{ item.damageP }}</span>
         </div>
         <div class='play-detail'>
