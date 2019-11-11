@@ -19,11 +19,11 @@
       <div class="battle-detail">
         <ul class="config">
           <li>
-            <img src="../dist/self.svg" @click="lookMyself">
+            <img src="../assets/self.svg" @click="lookMyself">
             <span class="config-detail">个人显示开关</span>
           </li>
           <li>
-            <img src="../dist/setting.svg" alt="">
+            <img src="../assets/setting.svg" alt="">
             <span class="config-detail">设置开发中</span>
           </li>
         </ul>
@@ -63,7 +63,7 @@
               {{ item.maxhit }}
               <span style="float: right;">
                 {{ item.deaths }}
-                <img src="../dist/kulou.svg" class="death-icon">
+                <img src="../assets/kulou.svg" class="death-icon">
               </span>
             </div>
           </div>
