@@ -3,14 +3,14 @@
     <svg class='damage' xmlns='http://www.w3.org/2000/svg'>
       <defs>
         <g id='sex'>
-          <path d="m50 0l43.3 25l0 50l-43.3 25l-43.3 -25l0 -50z" />
+          <path d="m25 7.5l15.155 8.75l0 17.5l-15.155 8.75l-15.155 -8.75l0 -17.5z" />
         </g>
         <linearGradient id="Gradient" x1="0" y1="0" x2="1" y2="1">
           <stop offset="0" stop-color="white" stop-opacity="1" />
           <stop offset="1" stop-color="white" stop-opacity="0.3" />
         </linearGradient>
         <mask id="Mask">
-          <rect x="0" y="-6" width="100" height="112" fill="url(#Gradient)"  />
+          <rect x="0" y="-3" width="50" height="56" fill="url(#Gradient)"  />
         </mask>
       </defs>
     </svg>
@@ -38,7 +38,7 @@
             <svg class="job-border" xmlns='http://www.w3.org/2000/svg'>
               <defs>
                 <clipPath :id="`sex-mask${index}`">
-                  <rect x="0" y="-6" width="100" :height="getPercentNumber(item.damageP)"/>
+                  <rect x="0" y="-3" width="50" :height="getPercentNumber(item.damageP)"/>
                 </clipPath>
               </defs>
               <use xlink:href='#sex' class="border-sex" />
@@ -143,7 +143,7 @@ export default class Home extends Vue {
     }
   }
   private getPercentNumber(percent: string): number {
-    const height = 112 * parseInt(percent, 10) / parseInt((this.TopDamage as string), 10);
+    const height = 56 * parseInt(percent, 10) / parseInt((this.TopDamage as string), 10);
     return height;
   }
   private setTestData(): void {
@@ -171,25 +171,28 @@ export default class Home extends Vue {
     0 -1px 3px #664710;
 }
 .home {
-  min-width: 200px;
+  min-width: 180px;
+  position: relative;
 }
 .battle-detail {
   width: 100%;
   font-size: 14px;
   font-weight: 300;
-  color: @black;
-  text-shadow: -1px 0 3px #dbdbdb, 0 1px 3px #dbdbdb, 1px 0 3px #dbdbdb,
-    0 -1px 3px #dbdbdb;
+  color: @dmgtext;
+  text-shadow: -1px 0 3px #664710, 0 1px 3px #664710, 1px 0 3px #664710,
+    0 -1px 3px #664710;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+  overflow:hidden;
   span {
     margin-right: 5px;
     font-size: 12px;
   }
   .config {
-    display: block;
     list-style: none;
-    float: right;
     margin: 0;
-    position: relative;
+    position: absolute;
+    top: 0;right: 0;
     li {
       cursor: pointer;
       display: inline-block;
@@ -215,31 +218,26 @@ export default class Home extends Vue {
   // width: 100%;
   overflow: hidden;
   border: solid #ddd 1px;
-  box-shadow: inset 0px 0px 20px #2e2e2e;
-  transition: all 0.5s;
+  box-shadow: inset -5px -5px 35px 0px #333;
+  transition: all 0.4s;
   .damage-job {
     width: 50px;
     height: 50px;
     position: relative;
     .job-border {
       transform-origin: top left;
-      width: 100px;
-      height: 100px;
-      transform: scale(0.5);
+      width: 50px;
+      height: 50px;
     }
     .border-sex {
-      transform-origin: center center;
       fill: none;
       stroke: #eeeeee;
-      stroke-width: 14px;
-      transform: scale(0.7);
+      stroke-width: 6px;
     }
     .sex-percent {
-      transform-origin: center center;
-      stroke: #e75d00;
+      stroke: #3f3f3f;
       fill: none;
-      stroke-width: 10px;
-      transform: scale(0.7) rotate(180deg);
+      stroke-width: 3px;
     }
     .damageP {
       position: absolute;
@@ -279,7 +277,8 @@ export default class Home extends Vue {
       text-align: right;
     }
     .maxhit {
-      font-size: 10px;
+      line-height: 12px;
+      font-size: 11px;
     }
     .death-icon {
       opacity: 0.6;
@@ -311,7 +310,7 @@ export default class Home extends Vue {
       fill: #dbdbdb;
     }
     .sex-percent {
-      stroke: #e7e7e7;
+      stroke: #ffffff;
     }
   }
   .play-detail {
@@ -322,8 +321,8 @@ export default class Home extends Vue {
 }
 .damage {
   background-color: transparent;
-  width: 100px;
-  height: 100px;
+  width: 50px;
+  height: 50px;
   position: absolute;
   left: -9999px;
   #damageP {
