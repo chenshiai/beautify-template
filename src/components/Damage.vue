@@ -1,0 +1,39 @@
+<template>
+  <span :id="`dps${index}`"></span>
+</template>
+
+<script lang='ts'>
+// dps数据动态效果组件
+import { Vue, Prop, Component, Watch } from 'vue-property-decorator';
+import { CountUp } from '../util/countUp.min.js';
+interface CountUpType {
+  startVal: number;
+  duration: number;
+}
+interface CountObject {
+  update: (value: number) => void;
+  start: () => void;
+}
+@Component
+export default class Demage extends Vue {
+  @Prop({ default: '' }) private ENCDPS!: string;
+  @Prop({ default: 0 }) private index!: number;
+  private change = {};
+  @Watch('ENCDPS')
+  private w_ENCDPS(newVal: string) {
+    this.$nextTick(() => {
+      (this.change as CountObject).update(parseInt(newVal, 10));
+    });
+  }
+  private mounted() {
+    const options: CountUpType = {
+      startVal: 0,
+      duration: 1.5,
+    };
+    this.change = new CountUp(`dps${this.index}`, parseInt(this.ENCDPS, 10), options);
+    this.$nextTick(() => {
+      (this.change as CountObject).start();
+    });
+  }
+}
+</script>
