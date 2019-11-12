@@ -112,16 +112,17 @@ export default class Home extends Vue {
   get combtants(): People[] {
     const list: People[] = [];
     const { Combatant } = this.data;
-    Object.keys(Combatant).forEach((item: string) => {
+    Object.keys(Combatant).some((item: string) => {
+      if (this.Myself) {
+        const you = 'YOU'; // tslint不允许通过字符串文本访问对象
+        list.push((Combatant as Combatants)[you]);
+        return true;
+      }
       (Combatant as Combatants)[item].damageP = (Combatant as Combatants)[item]['damage%'];
       list.push((Combatant as Combatants)[item]);
     });
     if (list.length > 0 ) {
       this.TopDamage = list[0].damageP;
-    }
-    if (this.Myself) {
-      const you = 'YOU'; // tslint不允许通过字符串文本访问对象
-      return [(Combatant as Combatants)[you]];
     }
     return list;
   }
