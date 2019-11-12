@@ -65,9 +65,9 @@
         <img :src="`../dist/img/${'setting'}.svg`" alt="">
         <span class="config-detail">设置开发中</span>
       </li>
-      <li>
+      <!-- <li>
         <span @click="setTestData">{{Myself}}</span>
-      </li>
+      </li> -->
     </ul>
   </div>
 </template>
