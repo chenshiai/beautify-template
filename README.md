@@ -1,5 +1,5 @@
 # [FFXIV-BeautiyTemplate](https://github.com/chenshiai/beautify-template)
-![](https://img.shields.io/badge/ver-0.2.2-green) ![](https://img.shields.io/badge/state-developing-orange)
+![](https://img.shields.io/badge/ver-0.2.3-green) ![](https://img.shields.io/badge/state-developing-orange)
 ## 欢迎使用
 欢迎使用我自制的美化插件。目前ACT国际版中自带的美化模板中，没有找到适合自己的界面布局的模板，所以就按照自己的意思来做了。
 大部分的样式都是我自己的需求，所以并不是所有人都适合，如果你屏幕的分辨率小于`1600x900`，那么这个就会比较占用空间。
