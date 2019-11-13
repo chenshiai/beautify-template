@@ -54,11 +54,11 @@
     </template>
     <ul class="config">
       <li @click="lookMyself">
-        <img :src="`../img/${'self'}.svg`">
+        <img :src="`../dist/img/${'self'}.svg`">
         <span class="config-detail">个人显示开关</span>
       </li>
       <li @click="toConfig">
-        <img :src="`../img/${'setting'}.svg`" alt="">
+        <img :src="`../dist/img/${'setting'}.svg`" alt="">
         <span class="config-detail">设置</span>
       </li>
     </ul>
