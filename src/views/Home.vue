@@ -38,15 +38,23 @@
             <img class='job' :src="`../dist/icons/${item.Job.toLowerCase()}.png`" />
           </div>
           <div class='play-detail'>
-            <div class='name'>{{ item.name }}<span v-show="showConfigs.abbreviation.status"> · {{item.Job}}</span></div>
+            <div class='name'>{{ item.name }}
+              <span v-show="showConfigs.abbreviation.status"> · {{item.Job}}</span>
+            </div>
             <div class='encdps'>
-              <div style="float: left;">
-                {{ item.ENCHPS }}<span class="unit" v-show="showConfigs.suffix.status">HPS</span>
+              <div class="dc-pct">
+                <span class="direct" v-show="showConfigs.direct.status">{{ item.DirectHitPct }}</span>
+                <span class="crit" v-show="showConfigs.crit.status">{{ item.crithitP }}</span>
+                <span class="directCrit" v-show="showConfigs.dirctAcrit.status">{{ item.CritDirectHitPct }}</span>
               </div>
               <Damage :ENCDPS="item.ENCDPS" :player="item.name"></Damage><span class="unit" v-show="showConfigs.suffix.status">DPS</span>
             </div>
-            <div class='maxhit' v-show="showConfigs.maxhit.status">
-              {{ item.maxhit }}
+            <div class='bottom'>
+              <span v-show="showConfigs.maxhit.status" style="float: right">{{ item.maxhit }}</span>
+              <span v-show="showConfigs.deaths.status">
+                <img :src="`../dist/img/kulou.svg`" alt="">
+                {{ item.deaths }}
+              </span>
             </div>
           </div>
         </div>
@@ -54,11 +62,11 @@
     </template>
     <ul class="config">
       <li @click="lookMyself">
-        <img :src="`../dist/img/${'self'}.svg`">
+        <img :src="`../dist/img/self.svg`">
         <span class="config-detail">个人显示开关</span>
       </li>
       <li @click="toConfig">
-        <img :src="`../dist/img/${'setting'}.svg`" alt="">
+        <img :src="`../dist/img/setting.svg`" alt="">
         <span class="config-detail">设置</span>
       </li>
     </ul>
@@ -88,6 +96,10 @@ interface People {
   maxhit?: string;
   deaths?: string;
   damageP?: string;
+  crithitP?: string;
+  DirectHitPct?: string;
+  CritDirectHitPct?: string;
+  'crithit%'?: string;
   'damage%': string;
 }
 interface Combatants {
@@ -120,6 +132,7 @@ export default class Home extends Vue {
         list.push((Combatant as Combatants)[you]);
         return true;
       }
+      (Combatant as Combatants)[item].crithitP = (Combatant as Combatants)[item]['crithit%'];
       (Combatant as Combatants)[item].damageP = (Combatant as Combatants)[item]['damage%'];
       list.push((Combatant as Combatants)[item]);
     });
@@ -155,6 +168,7 @@ export default class Home extends Vue {
   private initConfigs(): void {
     const configs = getCookie('configs');
     if (configs) {
+      console.log(configs);
       this.setShowConfigs(JSON.parse(configs));
     } else {
       setCookie('configs', JSON.stringify(this.showConfigs));
@@ -180,6 +194,9 @@ export default class Home extends Vue {
 @Dps: rgba(144, 47, 41, 0.8);
 @Tank: rgba(38, 87, 134, 0.8);
 @Heal: rgba(90, 111, 51, 0.8);
+@Direct: rgba(0, 183, 255, 1);
+@Crit: rgba(223, 100, 0, 1);
+@DC: rgba(226, 0, 215, 1);
 @black: #272727;
 .waiting {
   margin-left: 3px;
@@ -193,6 +210,9 @@ export default class Home extends Vue {
 .home {
   min-height: 50px;
   position: relative;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+  overflow:hidden;
 }
 .battle-detail {
   width: 100%;
@@ -201,9 +221,6 @@ export default class Home extends Vue {
   color: @dmgtext;
   text-shadow: -1px 0 3px #664710, 0 1px 3px #664710, 1px 0 3px #664710,
     0 -1px 3px #664710;
-  white-space:nowrap;
-  text-overflow:ellipsis;
-  overflow:hidden;
   padding: 0 5px;
   border-bottom: solid #333333 3px;
   span {
@@ -286,6 +303,7 @@ export default class Home extends Vue {
     }
   }
   .play-detail {
+    position: relative;
     flex-grow: 1;
     color: #fff;
     font-size: 14px;
@@ -295,17 +313,36 @@ export default class Home extends Vue {
       0 -1px 3px #664710;
     .name {
       line-height: 18px;
-      white-space:nowrap;
-      text-overflow:ellipsis;
-      overflow:hidden;
     }
     
     .encdps {
       text-align: right;
     }
-    .maxhit {
+    .dc-pct {
+      float: left;
+      font-size: 10px;
+      line-height: 14px;
+      text-align: left;
+      .direct {
+        color: @Direct;
+      }
+      .crit {
+        color: @Crit;
+      }
+      .directCrit {
+        color: @DC;
+      }
+      span {
+        display: inline-block;
+        width: 25px;
+      }
+    }
+    .bottom {
       line-height: 16px;
       font-size: 11px;
+      img {
+        width: 10px;
+      }
     }
     .death-icon {
       opacity: 0.6;
