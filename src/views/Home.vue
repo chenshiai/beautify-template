@@ -23,7 +23,7 @@
         <span>团伤:{{ encounter.ENCDPS }}</span>
       </div>
       <transition-group name="list-complete">
-        <div v-for='(item, index) in (combtants)' :key='item.name'
+        <div v-for='(item, index) in combtants' :key='item.name'
           :class="['combtant', item.name === 'YOU' ? 'self-combtant' :  getJobColor(item.Job)]" >
           <div class='damage-job'>
             <svg class="job-border" xmlns='http://www.w3.org/2000/svg'>
@@ -41,13 +41,10 @@
             <div class='name'>{{ item.name }} · {{item.Job}}</div>
             <div class='encdps'>
               <div style="float: left;">
-                {{ item.ENCHPS }}
-                <span class="unit">HPS</span>
+                {{ item.ENCHPS }}<span class="unit">HPS</span>
               </div>
-              <div :id="`dps-${item.name}`">
-                <Damage :ENCDPS="item.ENCDPS" :index="index"></Damage>
-                <span class="unit">DPS</span>
-              </div>
+              <Damage :ENCDPS="item.ENCDPS" :player="item.name"></Damage>
+              <span class="unit">DPS</span>
             </div>
             <div class='maxhit'>
               {{ item.maxhit }}
@@ -65,9 +62,6 @@
         <img :src="`../dist/img/${'setting'}.svg`" alt="">
         <span class="config-detail">设置开发中</span>
       </li>
-      <!-- <li>
-        <span @click="setTestData">{{Myself}}</span>
-      </li> -->
     </ul>
   </div>
 </template>
@@ -76,7 +70,6 @@
 // @ is an alias to /src
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { isDps, isHeal, isTank } from '../util/index';
-import mockdata from '../assets/data.js';
 import Damage from '../components/Damage.vue';
 
 interface Detail {
@@ -151,9 +144,6 @@ export default class Home extends Vue {
   private getPercentNumber(percent: string): number {
     const height = 56 * parseInt(percent, 10) / parseInt((this.TopDamage as string), 10);
     return height;
-  }
-  private setTestData(): void {
-    this.data = mockdata;
   }
   private mounted(): void {
     document.addEventListener('onOverlayDataUpdate', (act) => {
@@ -271,8 +261,6 @@ export default class Home extends Vue {
   }
   .play-detail {
     flex-grow: 1;
-    margin-left: 5px;
-    padding-right: 5px;
     color: #fff;
     font-size: 14px;
     line-height: 1;
@@ -286,7 +274,6 @@ export default class Home extends Vue {
     }
     
     .encdps {
-      font-weight: bold;
       text-align: right;
     }
     .maxhit {
@@ -299,7 +286,8 @@ export default class Home extends Vue {
       vertical-align:middle;
     }
     .unit {
-      font-size: 12px;
+      display: inline-block;
+      transform: scale(0.7);
     }
   }
 }
@@ -358,10 +346,9 @@ export default class Home extends Vue {
   left: -9999px;
 }
 
-.list-complete-enter, .list-complete-leave-to
-/* .list-complete-leave-active for below version 2.1.8 */ {
+.list-complete-enter, .list-complete-leave-to {
   opacity: 0;
-  transform: translateX(30px);
+  transform: scale(0.7);
   width: 100%;
 }
 .list-complete-leave-active {
