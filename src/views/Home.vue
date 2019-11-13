@@ -15,7 +15,7 @@
         </mask>
       </defs>
     </svg>
-    <div class="waiting" v-if="combtants.length <= 0">等待数据输入</div>
+    <div class="waiting" v-if="combtants.length <= 0">等待数据输入...</div>
     <template v-else>
       <div class="battle-detail">
         <div>{{ encounter.CurrentZoneName }}</div>
@@ -25,7 +25,7 @@
       <transition-group name="list-complete">
         <div v-for='(item, index) in combtants' :key='item.name'
           :class="['combtant', item.name === 'YOU' ? 'self-combtant' :  getJobColor(item.Job)]" >
-          <div class='damage-job'>
+          <div class='damage-job' v-show="showConfigs.joblogo.status">
             <svg class="job-border" xmlns='http://www.w3.org/2000/svg'>
               <defs>
                 <clipPath :id="`sex-mask${index}`">
@@ -38,15 +38,14 @@
             <img class='job' :src="`../dist/icons/${item.Job.toLowerCase()}.png`" />
           </div>
           <div class='play-detail'>
-            <div class='name'>{{ item.name }} · {{item.Job}}</div>
+            <div class='name'>{{ item.name }}<span v-show="showConfigs.abbreviation.status"> · {{item.Job}}</span></div>
             <div class='encdps'>
               <div style="float: left;">
-                {{ item.ENCHPS }}<span class="unit">HPS</span>
+                {{ item.ENCHPS }}<span class="unit" v-show="showConfigs.suffix.status">HPS</span>
               </div>
-              <Damage :ENCDPS="item.ENCDPS" :player="item.name"></Damage>
-              <span class="unit">DPS</span>
+              <Damage :ENCDPS="item.ENCDPS" :player="item.name"></Damage><span class="unit" v-show="showConfigs.suffix.status">DPS</span>
             </div>
-            <div class='maxhit'>
+            <div class='maxhit' v-show="showConfigs.maxhit.status">
               {{ item.maxhit }}
             </div>
           </div>
@@ -54,13 +53,13 @@
       </transition-group>
     </template>
     <ul class="config">
-      <li>
-        <img :src="`../dist/img/${'self'}.svg`" @click="lookMyself">
+      <li @click="lookMyself">
+        <img :src="`../img/${'self'}.svg`">
         <span class="config-detail">个人显示开关</span>
       </li>
-      <li>
-        <img :src="`../dist/img/${'setting'}.svg`" alt="">
-        <span class="config-detail">设置开发中</span>
+      <li @click="toConfig">
+        <img :src="`../img/${'setting'}.svg`" alt="">
+        <span class="config-detail">设置</span>
       </li>
     </ul>
   </div>
@@ -69,8 +68,11 @@
 <script lang='ts'>
 // @ is an alias to /src
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { isDps, isHeal, isTank } from '../util/index';
+import { isDps, isHeal, isTank, setCookie, getCookie } from '../util/index';
+import { State, Action, namespace } from 'vuex-class';
 import Damage from '../components/Damage.vue';
+import mockdata from '../assets/data';
+const someModule = namespace('showConfigs');
 
 interface Detail {
   Encounter: object;
@@ -104,6 +106,8 @@ export default class Home extends Vue {
   };
   private Myself: boolean = false;
   private TopDamage: string | undefined = '';
+  @someModule.State((state) => state.showConfigs) private showConfigs: any;
+  @someModule.Action('setShowConfigs') private setShowConfigs!: (params: object) => void;
   get encounter(): any {
     return this.data.Encounter;
   }
@@ -145,8 +149,26 @@ export default class Home extends Vue {
     const height = 56 * parseInt(percent, 10) / parseInt((this.TopDamage as string), 10);
     return height;
   }
+  private toConfig(): void {
+    this.$router.push('config');
+  }
+  private initConfigs(): void {
+    const configs = getCookie('configs');
+    if (configs) {
+      this.setShowConfigs(JSON.parse(configs));
+    } else {
+      setCookie('configs', JSON.stringify(this.showConfigs));
+    }
+  }
   private mounted(): void {
+    // this.data = mockdata; // 测试用数据
     document.addEventListener('onOverlayDataUpdate', (act) => {
+      this.updateTemplate(act);
+    });
+    this.initConfigs();
+  }
+  private destroyed() {
+    document.removeEventListener('onOverlayDataUpdate', (act) => {
       this.updateTemplate(act);
     });
   }
@@ -160,12 +182,15 @@ export default class Home extends Vue {
 @Heal: rgba(90, 111, 51, 0.8);
 @black: #272727;
 .waiting {
+  margin-left: 3px;
   color: @dmgtext;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+  overflow:hidden;
   text-shadow: -1px 0 3px #664710, 0 1px 3px #664710, 1px 0 3px #664710,
     0 -1px 3px #664710;
 }
 .home {
-  min-width: 195px;
   min-height: 50px;
   position: relative;
 }
@@ -188,11 +213,12 @@ export default class Home extends Vue {
 }
 .config {
   list-style: none;
-  margin: 0;
+  margin: 3px 0 0 0;
   padding: 0;
   position: absolute;
   top: 0;right: 0;
   font-size: 10px;
+  z-index: 10;
   li {
     cursor: pointer;
     display: inline-block;
@@ -217,8 +243,8 @@ export default class Home extends Vue {
 }
 .combtant {
   display: flex;
-  // width: 100%;
   overflow: hidden;
+  min-height: 34px;
   border: solid #333333 1px;
   border-left: solid #333333 3px;
   border-right: solid #333333 3px;
@@ -263,6 +289,7 @@ export default class Home extends Vue {
     flex-grow: 1;
     color: #fff;
     font-size: 14px;
+    padding:0 2px 0 2px;
     line-height: 1;
     text-shadow: -1px 0 3px #664710, 0 1px 3px #664710, 1px 0 3px #664710,
       0 -1px 3px #664710;
@@ -277,7 +304,7 @@ export default class Home extends Vue {
       text-align: right;
     }
     .maxhit {
-      line-height: 12px;
+      line-height: 16px;
       font-size: 11px;
     }
     .death-icon {
