@@ -49,7 +49,7 @@ const mutations = {
     }
   },
   setShowConfigs(states: any, params: any) {
-    states.showConfigs = params;
+    states.showConfigs = Object.assign(states.showConfigs, params);
   },
 };
 const actions: any = {
