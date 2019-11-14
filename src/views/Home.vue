@@ -6,9 +6,9 @@
           <path d="m25 7.5l15.155 8.75l0 17.5l-15.155 8.75l-15.155 -8.75l0 -17.5z" />
         </g>
         <linearGradient id="Gradient" x1="1" y1="1" x2="0" y2="0">
-          <stop offset="0" stop-color="white" stop-opacity="0" />
+          <stop offset="0.1" stop-color="white" stop-opacity="0" />
           <stop offset="0.4" stop-color="white" stop-opacity="1"></stop>
-          <stop offset="1" stop-color="white" stop-opacity="0" />
+          <stop offset="0.9" stop-color="white" stop-opacity="0" />
         </linearGradient>
         <mask id="Mask">
           <rect x="0" y="-3" width="50" height="56" fill="url(#Gradient)"  />
@@ -17,11 +17,7 @@
     </svg>
     <div class="waiting" v-if="combtants.length <= 0">等待数据输入...</div>
     <template v-else>
-      <div class="battle-detail">
-        <div>{{ encounter.CurrentZoneName }}</div>
-        <span>时间:{{ encounter.duration }}</span>
-        <span>团伤:{{ encounter.ENCDPS }}</span>
-      </div>
+      <BattleDetail :encounter="encounter"></BattleDetail>
       <transition-group name="list-complete">
         <div v-for='(item, index) in combtants' :key='item.name'
           :class="['combtant', item.name === 'YOU' ? 'self-combtant' :  getJobColor(item.Job)]" >
@@ -79,6 +75,7 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 import { isDps, isHeal, isTank, setCookie, getCookie } from '../util/index';
 import { State, Action, namespace } from 'vuex-class';
 import Damage from '../components/Damage.vue';
+import BattleDetail from '../components/BattleDetail.vue';
 import mockdata from '../assets/data';
 const someModule = namespace('showConfigs');
 
@@ -108,6 +105,7 @@ interface Combatants {
 @Component({
   components: {
     Damage,
+    BattleDetail,
   },
 })
 export default class Home extends Vue {
@@ -168,14 +166,13 @@ export default class Home extends Vue {
   private initConfigs(): void {
     const configs = getCookie('configs');
     if (configs) {
-      console.log(configs);
       this.setShowConfigs(JSON.parse(configs));
     } else {
       setCookie('configs', JSON.stringify(this.showConfigs));
     }
   }
   private mounted(): void {
-    // this.data = mockdata; // 测试用数据
+    this.data = mockdata; // 测试用数据
     document.addEventListener('onOverlayDataUpdate', (act) => {
       this.updateTemplate(act);
     });
@@ -190,13 +187,13 @@ export default class Home extends Vue {
 </script>
 
 <style lang='less'>
-@dmgtext: #fff700;
+@dmgtext: #fffdbd;
 @Dps: rgba(144, 47, 41, 0.8);
 @Tank: rgba(38, 87, 134, 0.8);
 @Heal: rgba(90, 111, 51, 0.8);
-@Direct: rgba(0, 183, 255, 1);
-@Crit: rgba(223, 100, 0, 1);
-@DC: rgba(226, 0, 215, 1);
+@Direct: rgb(103, 211, 253);
+@Crit: rgb(255, 208, 137);
+@DC: rgb(225, 255, 144);
 @black: #272727;
 .waiting {
   margin-left: 3px;
@@ -213,20 +210,6 @@ export default class Home extends Vue {
   white-space:nowrap;
   text-overflow:ellipsis;
   overflow:hidden;
-}
-.battle-detail {
-  width: 100%;
-  font-size: 14px;
-  font-weight: 300;
-  color: @dmgtext;
-  text-shadow: -1px 0 3px #664710, 0 1px 3px #664710, 1px 0 3px #664710,
-    0 -1px 3px #664710;
-  padding: 0 5px;
-  border-bottom: solid #333333 3px;
-  span {
-    margin-right: 5px;
-    font-size: 12px;
-  }
 }
 .config {
   list-style: none;
@@ -277,7 +260,7 @@ export default class Home extends Vue {
     }
     .border-sex {
       fill: none;
-      stroke: #ddd;
+      stroke: rgb(255, 247, 210);
       stroke-width: 5px;
     }
     .sex-percent {
@@ -392,6 +375,17 @@ export default class Home extends Vue {
     color: @black;
     text-shadow: -1px 0 3px #eeeeee, 0 1px 3px #eeeeee, 1px 0 3px #eeeeee,
         0 -1px 3px #eeeeee;
+    .dc-pct {
+      .direct {
+        color: #757575;
+      }
+      .crit {
+        color: #5c5b5b;
+      }
+      .directCrit {
+        color: #363636;
+      }
+    }
   }
 }
 @keyframes rotate {
