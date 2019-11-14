@@ -172,7 +172,7 @@ export default class Home extends Vue {
     }
   }
   private mounted(): void {
-    this.data = mockdata; // 测试用数据
+    // this.data = mockdata; // 测试用数据
     document.addEventListener('onOverlayDataUpdate', (act) => {
       this.updateTemplate(act);
     });
