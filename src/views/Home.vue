@@ -34,7 +34,8 @@
             <img class='job' :src="`../dist/icons/${item.Job.toLowerCase()}.png`" />
           </div>
           <div class='play-detail'>
-            <div class='name'>{{ item.name }}
+            <div class='name'>
+              <span v-show="showConfigs.playname.status">{{ item.name }}</span>
               <span v-show="showConfigs.abbreviation.status"> · {{item.Job}}</span>
             </div>
             <div class='encdps'>
@@ -117,7 +118,6 @@ export default class Home extends Vue {
   private Myself: boolean = false;
   private TopDamage: string | undefined = '';
   @someModule.State((state) => state.showConfigs) private showConfigs: any;
-  @someModule.Action('setShowConfigs') private setShowConfigs!: (params: object) => void;
   get encounter(): any {
     return this.data.Encounter;
   }
@@ -163,20 +163,11 @@ export default class Home extends Vue {
   private toConfig(): void {
     this.$router.push('config');
   }
-  private initConfigs(): void {
-    const configs = getCookie('configs');
-    if (configs) {
-      this.setShowConfigs(JSON.parse(configs));
-    } else {
-      setCookie('configs', JSON.stringify(this.showConfigs));
-    }
-  }
   private mounted(): void {
-    // this.data = mockdata; // 测试用数据
+    this.data = mockdata; // 测试用数据
     document.addEventListener('onOverlayDataUpdate', (act) => {
       this.updateTemplate(act);
     });
-    this.initConfigs();
   }
   private destroyed() {
     document.removeEventListener('onOverlayDataUpdate', (act) => {

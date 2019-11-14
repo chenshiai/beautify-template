@@ -1,6 +1,10 @@
 import { Commit, Mutation } from 'vuex';
 const state: any = {
   showConfigs: {
+    playname: {
+      status: true,
+      label: '玩家名称',
+    },
     joblogo: {
       status: true,
       label: '职业图标',

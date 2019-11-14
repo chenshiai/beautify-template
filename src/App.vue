@@ -5,12 +5,39 @@
   </div>
 </template>
 
+<script lang="ts">
+import { Component, Vue, Prop } from 'vue-property-decorator';
+import { getCookie, setCookie } from './util/index';
+import { State, Action, namespace } from 'vuex-class';
+const someModule = namespace('showConfigs');
+
+@Component
+export default class App extends Vue {
+  @someModule.State((state) => state.showConfigs) private showConfigs: any;
+  @someModule.Action('setShowConfigs') private setShowConfigs!: (params: object) => void;
+  private initConfigs(): void {
+    const configs = getCookie('configs');
+    if (configs) {
+      this.setShowConfigs(JSON.parse(configs));
+    } else {
+      setCookie('configs', JSON.stringify(this.showConfigs));
+    }
+  }
+  private mounted(): void {
+    this.initConfigs();
+  }
+}
+</script>
+
 <style lang="less">
 body,
 html {
   margin: 0;
   padding: 0;
   overflow: hidden;
+}
+body {
+  background-color: rgba(51, 51, 51, 0.8);
 }
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
