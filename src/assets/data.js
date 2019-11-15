@@ -65,7 +65,7 @@ const data = {
     'powerheal-*': '1.00K',
     'kills': '0',
     'deaths': '0',
-    'CurrentZoneName': 'CurrentZoneName',
+    'CurrentZoneName': 'ZoneName区域名',
     'Last10DPS': '',
     'Last30DPS': '',
     'Last60DPS': ''
