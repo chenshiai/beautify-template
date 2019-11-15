@@ -235,12 +235,12 @@ export default class Home extends Vue {
 .combtant {
   display: flex;
   overflow: hidden;
-  min-height: 34px;
   border: solid #333333 1px;
   border-left: solid #333333 3px;
   border-right: solid #333333 3px;
   box-shadow: inset 0px 0px 15px 2px #333;
   transition: all 0.4s;
+  letter-spacing: 1px;
   .damage-job {
     width: 50px;
     height: 50px;
@@ -250,14 +250,13 @@ export default class Home extends Vue {
       height: 50px;
     }
     .border-sex {
-      fill: none;
+      fill: rgba(61, 61, 61, 0.4);
       stroke: rgb(255, 247, 210);
       stroke-width: 5px;
     }
     .sex-percent {
       fill: none;
       stroke-width: 3.5px;
-      // animation: rotate 2s ease-in-out infinite alternate; // 不怎么显眼的动画效果
     }
     .damageP {
       position: absolute;
@@ -291,6 +290,7 @@ export default class Home extends Vue {
     
     .encdps {
       text-align: right;
+      line-height: 16px;
     }
     .dc-pct {
       float: left;
@@ -314,6 +314,8 @@ export default class Home extends Vue {
     .bottom {
       line-height: 16px;
       font-size: 11px;
+      letter-spacing: 0;
+      opacity: 0.7;
       img {
         width: 10px;
       }
@@ -356,7 +358,6 @@ export default class Home extends Vue {
   .damage-job {
     .border-sex {
       stroke: #333333;
-      fill: #dbdbdb;
     }
     .sex-percent {
       stroke: #ffffff;
@@ -379,20 +380,10 @@ export default class Home extends Vue {
     }
   }
 }
-@keyframes rotate {
-  0% {
-    opacity: 0.7;
-  }
-  100% {
-    opacity: 1;
-  }
-}
 .damage {
-  background-color: transparent;
   width: 50px;
   height: 50px;
   position: absolute;
-  left: -9999px;
 }
 
 .list-complete-enter, .list-complete-leave-to {

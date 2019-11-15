@@ -9,11 +9,17 @@ const routes = [
     path: '/',
     name: 'home',
     component: Home,
+    meta: {
+      keepAlive: true,
+    },
   },
   {
     path: '/config',
     name: 'config',
     component: Config,
+    meta: {
+      keepAlive: false,
+    },
   },
 ];
 

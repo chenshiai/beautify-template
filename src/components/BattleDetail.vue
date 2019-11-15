@@ -1,7 +1,7 @@
 <template>
   <div class="battle-detail">
-    <span>{{ encounter.duration }}</span>
-    <span>{{ encounter.ENCDPS }}</span>
+    <span>Time:{{ encounter.duration }}</span>
+    <span>Dps:{{ encounter.ENCDPS }}</span>
     <p><span>{{ encounter.CurrentZoneName }}</span></p>
   </div>
 </template>
@@ -24,8 +24,9 @@ export default class BattleDetail extends Vue {
 .battle-detail {
   width: 100%;
   font-size: 14px;
-  font-weight: 300;
+  font-weight: bold;
   color: #fffdbd;
+  letter-spacing: 1px;
   text-shadow: -1px 0 3px #664710, 0 1px 3px #664710, 1px 0 3px #664710,
     0 -1px 3px #664710;
   padding: 0 5px;
