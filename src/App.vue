@@ -1,6 +1,9 @@
 <template>
   <div id="app">
-    <router-view/>
+    <keep-alive>
+      <router-view v-if="$route.meta.keepAlive"/>
+    </keep-alive>
+    <router-view v-if="!$route.meta.keepAlive"/>
     <div class="buttom-ann"></div>
   </div>
 </template>
@@ -30,6 +33,10 @@ export default class App extends Vue {
 </script>
 
 <style lang="less">
+@font-face {
+  font-family: 'sao-font';
+  src: url('../public/font/sao.woff2');
+}
 body,
 html {
   margin: 0;
@@ -40,7 +47,7 @@ body {
   background-color: rgba(51, 51, 51, 0.8);
 }
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: 'sao-font', 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: transparent;
