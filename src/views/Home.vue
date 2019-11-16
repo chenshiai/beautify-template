@@ -31,7 +31,7 @@
               <use xlink:href='#sex' class="border-sex" />
               <use xlink:href='#sex' class="sex-percent" :clip-path="`url(#sex-mask${index})`" mask="url(#Mask)"/>
             </svg>
-            <img class='job' :src="`../dist/icons/${item.Job.toLowerCase()}.png`" />
+            <img class='job' :src="`../dist/icons/${item.Job.toLowerCase()}.png`" /> 
           </div>
           <div class='play-detail'>
             <div class='name'>
@@ -164,7 +164,7 @@ export default class Home extends Vue {
     this.$router.push('config');
   }
   private mounted(): void {
-    // this.data = mockdata; // 测试用数据
+    this.data = mockdata; // 测试用数据
     document.addEventListener('onOverlayDataUpdate', (act) => {
       this.updateTemplate(act);
     });
@@ -279,23 +279,22 @@ export default class Home extends Vue {
     position: relative;
     flex-grow: 1;
     color: #fff;
-    font-size: 14px;
-    padding:0 2px 0 2px;
+    padding: 2px;
     line-height: 1;
     text-shadow: -1px 0 3px #664710, 0 1px 3px #664710, 1px 0 3px #664710,
       0 -1px 3px #664710;
     .name {
-      line-height: 18px;
+      font-size: 14px;
     }
     
     .encdps {
+      font-size: 16px;
       text-align: right;
-      line-height: 16px;
     }
     .dc-pct {
       float: left;
-      font-size: 10px;
-      line-height: 14px;
+      font-size: 12px;
+      line-height: 16px;
       text-align: left;
       .direct {
         color: @Direct;
@@ -315,7 +314,7 @@ export default class Home extends Vue {
       line-height: 16px;
       font-size: 11px;
       letter-spacing: 0;
-      opacity: 0.7;
+      opacity: 0.8;
       img {
         width: 10px;
       }

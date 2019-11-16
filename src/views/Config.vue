@@ -50,10 +50,6 @@ export default class Config extends Vue {
     0 -1px 3px #664710;
 }
 .config-list {
-  // border: solid #333333 1px;
-  // border-left: solid #333333 3px;
-  // border-right: solid #333333 3px;
-  // background-color: rgba(51, 51, 51, 0.8);
   padding: 0 3px;
   .list-title {
     color: #fff700;
@@ -63,7 +59,7 @@ export default class Config extends Vue {
     color: #eee;
     height: 20px;
     margin-bottom: 5px;
-    font-size: 14px;
+    font-size: 16px;
     display: flex;
     span {
       flex: 4;
