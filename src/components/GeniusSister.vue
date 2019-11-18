@@ -19,7 +19,7 @@ export default class GeniusSister extends Vue {
   @ModuleShowConfigs.State((state) => state.showConfigs) private showConfigs: any;
   @ModuleGeniusSister.State((state) => state.message) private message: any;
   private mounted() {
-   (window as any).loadlive2d('live2d', '/dist/live2d/model/tia/model.json');
+   (window as any).loadlive2d('live2d', '/beautify-template/dist/live2d/model/tia/model.json'); //打包发布是需要添加地址 /beautify-template/dist 
   }
 }
 </script>
