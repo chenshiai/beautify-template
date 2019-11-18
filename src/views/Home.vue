@@ -121,7 +121,7 @@ export default class Home extends Vue {
     Combatant: {},
     isActive: false,
   };
-  private isClose: boolean = true;
+  private isClose: boolean = false;
   private Myself: boolean = false;
   private TopDamage: string | undefined = '';
   @ModuleShowConfigs.State((state) => state.showConfigs) private showConfigs: any;
