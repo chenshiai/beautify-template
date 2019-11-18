@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <GeniusSister></GeniusSister>
     <keep-alive>
       <router-view v-if="$route.meta.keepAlive"/>
     </keep-alive>
@@ -12,12 +13,17 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { getCookie, setCookie } from './util/index';
 import { State, Action, namespace } from 'vuex-class';
-const someModule = namespace('showConfigs');
+import GeniusSister from './components/GeniusSister.vue';
+const ModuleShowConfigs = namespace('showConfigs');
 
-@Component
+@Component({
+  components: {
+    GeniusSister,
+  },
+})
 export default class App extends Vue {
-  @someModule.State((state) => state.showConfigs) private showConfigs: any;
-  @someModule.Action('setShowConfigs') private setShowConfigs!: (params: object) => void;
+  @ModuleShowConfigs.State((state) => state.showConfigs) private showConfigs: any;
+  @ModuleShowConfigs.Action('setShowConfigs') private setShowConfigs!: (params: object) => void;
   private initConfigs(): void {
     const configs = getCookie('configs');
     if (configs) {
@@ -43,14 +49,10 @@ html {
   padding: 0;
   overflow: hidden;
 }
-body {
-  background-color: rgba(51, 51, 51, 0.8);
-}
 #app {
   font-family: 'sao-font', 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: transparent;
 }
 .buttom-ann{
   position: fixed;

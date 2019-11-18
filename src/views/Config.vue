@@ -1,9 +1,7 @@
 <template>
   <div class="config-page">
-    <div class="waiting">
-      <router-link to="/">返回</router-link>
-    </div>
     <div class="config-list">
+      <router-link to="/" class="waiting">返回</router-link>
       <span class="list-title">显示设定</span>
       <div v-for="(item, index) in showConfigs"
         :key="index"
@@ -22,12 +20,12 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { setCookie } from '../util/index';
 import { State, Action, namespace } from 'vuex-class';
-const someModule = namespace('showConfigs');
+const ModuleShowConfigs = namespace('showConfigs');
 
 @Component
 export default class Config extends Vue {
-  @someModule.State((state) => state.showConfigs) private showConfigs: any;
-  @someModule.Action('changeShowConfigs') private changeShowConfigs!: (params: object) => void;
+  @ModuleShowConfigs.State((state) => state.showConfigs) private showConfigs: any;
+  @ModuleShowConfigs.Action('changeShowConfigs') private changeShowConfigs!: (params: object) => void;
   private changed(e: any) {
     const params = {
       status: e.target.checked,
@@ -41,16 +39,18 @@ export default class Config extends Vue {
 
 <style lang="less">
 @dmgtext: #fffdbd;
+a {
+  text-decoration: none;
+}
 .waiting {
-  a {
-    color: @dmgtext;
-    text-decoration: none;
-  }
+  color: @dmgtext;
+  display: block;
   text-shadow: -1px 0 3px #664710, 0 1px 3px #664710, 1px 0 3px #664710,
     0 -1px 3px #664710;
 }
 .config-list {
-  padding: 0 3px;
+  background-color: rgba(51,51,51,0.8);
+  padding: 0 3px 10px 3px;
   .list-title {
     color: #fff700;
     font-weight: bold;

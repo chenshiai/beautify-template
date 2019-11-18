@@ -31,6 +31,7 @@ export default class BattleDetail extends Vue {
     0 -1px 3px #664710;
   padding: 0 5px;
   border-bottom: solid #333333 3px;
+  background-color: rgba(51, 51, 51, 0.8);
   white-space:nowrap;
   text-overflow:ellipsis;
   overflow:hidden;

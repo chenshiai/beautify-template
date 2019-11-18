@@ -15,8 +15,9 @@
         </mask>
       </defs>
     </svg>
-    <div class="waiting" v-if="combtants.length <= 0">等待数据输入...</div>
-    <template v-else>
+    <div class="waiting" v-if="!isClose && combtants.length <= 0">等待数据输入...</div>
+    <div class="waiting" v-if="isClose">详情数据已收起</div>
+    <template v-if="!isClose && combtants.length > 0">
       <BattleDetail :encounter="encounter"></BattleDetail>
       <transition-group name="list-complete">
         <div v-for='(item, index) in combtants' :key='item.name'
@@ -58,6 +59,10 @@
       </transition-group>
     </template>
     <ul class="config">
+      <li @click="closeList">
+        <img :src="`../dist/img/self.svg`">
+        <span class="config-detail">收起详情</span>
+      </li>
       <li @click="lookMyself">
         <img :src="`../dist/img/self.svg`">
         <span class="config-detail">个人显示开关</span>
@@ -78,7 +83,8 @@ import { State, Action, namespace } from 'vuex-class';
 import Damage from '../components/Damage.vue';
 import BattleDetail from '../components/BattleDetail.vue';
 import mockdata from '../assets/data';
-const someModule = namespace('showConfigs');
+const ModuleShowConfigs = namespace('showConfigs');
+const ModuleGeniusSister = namespace('geniusSister');
 
 interface Detail {
   Encounter: object;
@@ -115,9 +121,11 @@ export default class Home extends Vue {
     Combatant: {},
     isActive: false,
   };
+  private isClose: boolean = true;
   private Myself: boolean = false;
   private TopDamage: string | undefined = '';
-  @someModule.State((state) => state.showConfigs) private showConfigs: any;
+  @ModuleShowConfigs.State((state) => state.showConfigs) private showConfigs: any;
+  @ModuleGeniusSister.Action('changeMessage') private changeMessage!: (params: object) => void;
   get encounter(): any {
     return this.data.Encounter;
   }
@@ -141,9 +149,25 @@ export default class Home extends Vue {
   }
   private updateTemplate(act: any): void {
     this.data = act.detail;
+    this.TellMySister();
+  }
+  private TellMySister(): void {
+    const { data } = this;
+    const you = 'YOU';
+    const youDps = (data.Combatant as any)[you].ENCDPS;
+    const message = {
+      currentArea: (data.Encounter as any).CurrentZoneName,
+      time: (data.Encounter as any).duration,
+      totalDps: (data.Encounter as any).ENCDPS,
+      youDps,
+    };
+    this.changeMessage(message);
   }
   private lookMyself(): void {
     this.Myself = !this.Myself;
+  }
+  private closeList(): void {
+    this.isClose = !this.isClose;
   }
   private getJobColor(job: string): string {
     if (isDps(job)) {
@@ -165,6 +189,7 @@ export default class Home extends Vue {
   }
   private mounted(): void {
     // this.data = mockdata; // 测试用数据
+    // this.TellMySister();
     document.addEventListener('onOverlayDataUpdate', (act) => {
       this.updateTemplate(act);
     });

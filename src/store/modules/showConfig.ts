@@ -37,11 +37,15 @@ const state: any = {
       status: false,
       label: '直暴概率',
     },
+    geniussister: {
+      status: false,
+      label: '天才妹妹',
+    },
   },
 };
-const mutations = {
+const mutations: any = {
   changeShowConfigs(states: any, params: any) {
-    for (const item in states.showConfigs) {
+    for (const item in state.showConfigs) {
       if (states.showConfigs[item].label === params.label) {
         states.showConfigs[item].status = params.status;
         break;
