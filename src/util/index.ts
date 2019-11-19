@@ -59,3 +59,13 @@ export function getCookie(name: string) {
     return null;
   }
 }
+
+export function debounce(fn: any, wait: number): any {
+  let timeout: any = null;
+  return () => {
+    if (timeout !== null) {
+      clearTimeout(timeout);
+    }
+    timeout = setTimeout(fn, wait);
+  };
+}
