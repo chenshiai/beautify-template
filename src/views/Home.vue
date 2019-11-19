@@ -15,8 +15,7 @@
         </mask>
       </defs>
     </svg>
-    <div class="waiting" v-if="!isClose && combtants.length <= 0">等待数据输入...</div>
-    <div class="waiting" v-if="isClose">详情数据已收起</div>
+    <div class="waiting" v-show="!isClose && combtants.length <= 0">等待数据输入...</div>
     <template v-if="!isClose && combtants.length > 0">
       <BattleDetail :encounter="encounter"></BattleDetail>
       <transition-group name="list-complete">
@@ -60,16 +59,15 @@
     </template>
     <ul class="config">
       <li @click="closeList">
-        <img :src="`../dist/img/self.svg`">
-        <span class="config-detail">收起详情</span>
+        <span v-if="!isClose">收起</span>
+        <span v-else>展开</span>
       </li>
       <li @click="lookMyself">
-        <img :src="`../dist/img/self.svg`">
-        <span class="config-detail">个人显示开关</span>
+        <span v-if="!Myself">个人</span>
+        <span v-else>全体</span>
       </li>
       <li @click="toConfig">
-        <img :src="`../dist/img/setting.svg`" alt="">
-        <span class="config-detail">设置</span>
+        <span>设置</span>
       </li>
     </ul>
   </div>
@@ -188,8 +186,8 @@ export default class Home extends Vue {
     this.$router.push('config');
   }
   private mounted(): void {
-    // this.data = mockdata; // 测试用数据
-    // this.TellMySister();
+    this.data = mockdata; // 测试用数据
+    this.TellMySister();
     document.addEventListener('onOverlayDataUpdate', (act) => {
       this.updateTemplate(act);
     });
@@ -236,25 +234,13 @@ export default class Home extends Vue {
   font-size: 10px;
   z-index: 10;
   li {
-    cursor: pointer;
     display: inline-block;
     margin-right: 5px;
     min-width: 10px;
-    .config-detail {
-      position: absolute;
-      display: none;
-      text-align: center;
-      background-color: #fff;
-      box-shadow: #555555 0 0 5px;
-      right: 0px;
-      top: 16px;
-      min-width: 80px;
-    }
-    &:hover {
-      .config-detail {
-        display: block;
-      }
-    }
+    background-color: @dmgtext;
+    color: #505050;
+    box-shadow: -1px 0 3px #c09447, 0 1px 3px #c09447, 1px 0 3px #c09447,
+        0 -1px 3px #c09447;
   }
 }
 .combtant {

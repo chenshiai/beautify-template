@@ -40,10 +40,10 @@ export default class Config extends Vue {
 <style lang="less">
 @dmgtext: #fffdbd;
 a {
+  color: @dmgtext;
   text-decoration: none;
 }
 .waiting {
-  color: @dmgtext;
   display: block;
   text-shadow: -1px 0 3px #664710, 0 1px 3px #664710, 1px 0 3px #664710,
     0 -1px 3px #664710;

@@ -1,6 +1,8 @@
 <template>
   <div id="app">
-    <GeniusSister></GeniusSister>
+    <keep-alive>
+      <GeniusSister v-if="showConfigs.geniussister.status"></GeniusSister>
+    </keep-alive>
     <keep-alive>
       <router-view v-if="$route.meta.keepAlive"/>
     </keep-alive>
@@ -48,6 +50,11 @@ html {
   margin: 0;
   padding: 0;
   overflow: hidden;
+  user-select: none;
+}
+ul {
+  margin: 0;
+  padding: 0;
 }
 #app {
   font-family: 'sao-font', 'Avenir', Helvetica, Arial, sans-serif;
