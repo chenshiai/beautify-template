@@ -97,7 +97,7 @@ export default class GeniusSister extends Vue {
             break;
           }
           case 'abort': {
-            this.showTalk('本看板娘素材来源于手游《药水制作师》，由开源项目live2d.js提供技术支持。特别鸣谢：猫与向日葵。');
+            this.showTalk('你好啊，我是Tia。素材来源于手游《药水制作师》，由开源项目live2d.js提供的技术支持。特别鸣谢：猫与向日葵。');
             break;
           }
         }
@@ -151,12 +151,12 @@ export default class GeniusSister extends Vue {
     this.showTalk(quotations[index]);
   }
   private setChatTalk(): void {
-    fetch('https://api.tryto.cn/djt/text').then((res) => res.json()).then((res) => {
-      this.showTalk(res.data.content);
-    }).catch(() => {
-      const index = (Math.random() * wellKnownSaying.length) | 0;
-      this.showTalk(wellKnownSaying[index]);
-    });
+    // 下面是一个毒鸡汤的接口，访问一次就可以得到一句毒鸡汤
+    // fetch('https://api.tryto.cn/djt/text').then((res) => res.json()).then((res) => {
+    //   this.showTalk(res.data.content);
+    // });
+    const index = (Math.random() * wellKnownSaying.length) | 0;
+    this.showTalk(wellKnownSaying[index]);
   }
   private mounted() {
     // 将live2d的素材全部转移到对象存储OSS上。github的下载速度感人。
