@@ -231,7 +231,7 @@ export default class Home extends Vue {
   padding: 0;
   position: absolute;
   top: 0;right: 0;
-  font-size: 10px;
+  font-size: 12px;
   z-index: 10;
   li {
     display: inline-block;

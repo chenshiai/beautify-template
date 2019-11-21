@@ -4,9 +4,12 @@
       <div class="message" v-show="showMessage">
         <span>{{ talk }}</span>
         <div v-if="talk === ''">
-          <span>在『{{ message.currentArea }}』战斗了{{ message.time }}</span>
-          <div>团队秒伤是 {{ message.totalDps }}</div>
-          <div>你的秒伤是 {{ message.youDps }}</div>
+          <span v-if="message.currentArea === ''">并没有战斗数据呀~</span>
+          <div v-else>
+            <span>在『{{ message.currentArea }}』战斗了{{ message.time }}</span>
+            <div>团队秒伤是 {{ message.totalDps }}</div>
+            <div>你的秒伤是 {{ message.youDps }}</div>
+          </div>
         </div>
       </div>
     </transition>
@@ -25,7 +28,6 @@ import { State, Action, namespace } from 'vuex-class';
 import { debounce } from '../util/index';
 const ModuleShowConfigs = namespace('showConfigs');
 const ModuleGeniusSister = namespace('geniusSister');
-
 const quotations = [
   '干嘛呢你，快把手拿开！',
   '你看到过我的小熊吗？',
@@ -37,8 +39,7 @@ const quotations = [
   '警~察~叔~叔~~，这里有个变态一直在摸我(ó﹏ò｡)',
   '啦哩吼~~！',
 ];
-
- const wellKnownSaying = [
+const wellKnownSaying = [
    '蝼蚁之辈，妄想弑神？—— 伊芙利特',
    '在此绽放的月下美人，乃是送我坠入黄泉的彼岸花。—— 月读',
    '我就不能是你的典善吗？—— 某光呆',
@@ -113,11 +114,11 @@ export default class GeniusSister extends Vue {
     }
     // 监听妹妹
     if (live2d) {
-      live2d.addEventListener('mouseover', () => {
-        this.setTouchTalk();
-      });
+      // live2d.addEventListener('mouseover', () => {
+      //   this.setTouchTalk();
+      // });
     }
-    // 监听窗口
+    // 监听窗口大小
     const resize = debounce(() => {
       if (document.documentElement.clientWidth < 280) {
         this.showTalk('太小啦，能不能拉大一点？');
@@ -150,8 +151,12 @@ export default class GeniusSister extends Vue {
     this.showTalk(quotations[index]);
   }
   private setChatTalk(): void {
-    const index = (Math.random() * wellKnownSaying.length) | 0;
-    this.showTalk(wellKnownSaying[index]);
+    fetch('https://api.tryto.cn/djt/text').then((res) => res.json()).then((res) => {
+      this.showTalk(res.data.content);
+    }).catch(() => {
+      const index = (Math.random() * wellKnownSaying.length) | 0;
+      this.showTalk(wellKnownSaying[index]);
+    });
   }
   private mounted() {
     // 将live2d的素材全部转移到对象存储OSS上。github的下载速度感人。
@@ -197,14 +202,14 @@ export default class GeniusSister extends Vue {
   }
 }
 .message {
-  padding: 7px 12px;
-  width: 220px;
+  padding: 4px 12px;
+  width: 240px;
   height: 55px;
   top: -50px;
-  left: 20px;
+  left: 10px;
   color: #505050;
   border: 2px solid #333333;
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: rgba(255, 255, 255);
   font-size: 13px;
   font-weight: 400;
   text-overflow: ellipsis;
