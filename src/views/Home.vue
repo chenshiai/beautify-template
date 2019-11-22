@@ -15,7 +15,6 @@
         </mask>
       </defs>
     </svg>
-    <div class="waiting" v-show="!isClose && combtants.length <= 0">等待数据输入...</div>
     <template v-if="!isClose && combtants.length > 0">
       <BattleDetail :encounter="encounter"></BattleDetail>
       <transition-group name="list-complete">
@@ -58,6 +57,9 @@
       </transition-group>
     </template>
     <ul class="config">
+      <li @click="toConfig">
+        <span>设置</span>
+      </li>
       <li @click="closeList">
         <span v-if="!isClose">收起</span>
         <span v-else>展开</span>
@@ -65,9 +67,6 @@
       <li @click="lookMyself">
         <span v-if="!Myself">个人</span>
         <span v-else>全体</span>
-      </li>
-      <li @click="toConfig">
-        <span>设置</span>
       </li>
     </ul>
   </div>
@@ -81,8 +80,8 @@ import { State, Action, namespace } from 'vuex-class';
 import Damage from '../components/Damage.vue';
 import BattleDetail from '../components/BattleDetail.vue';
 import mockdata from '../assets/data';
+import Bus from '../util/eventBus';
 const ModuleShowConfigs = namespace('showConfigs');
-const ModuleGeniusSister = namespace('geniusSister');
 
 interface Detail {
   Encounter: object;
@@ -123,7 +122,6 @@ export default class Home extends Vue {
   private Myself: boolean = false;
   private TopDamage: string | undefined = '';
   @ModuleShowConfigs.State((state) => state.showConfigs) private showConfigs: any;
-  @ModuleGeniusSister.Action('changeMessage') private changeMessage!: (params: object) => void;
   get encounter(): any {
     return this.data.Encounter;
   }
@@ -147,7 +145,9 @@ export default class Home extends Vue {
   }
   private updateTemplate(act: any): void {
     this.data = act.detail;
-    this.TellMySister();
+    this.$nextTick(() => {
+      this.TellMySister();
+    });
   }
   private TellMySister(): void {
     const { data } = this;
@@ -159,12 +159,20 @@ export default class Home extends Vue {
       totalDps: (data.Encounter as any).ENCDPS,
       youDps,
     };
-    this.changeMessage(message);
+    Bus.$emit('changeMessage', message);
   }
   private lookMyself(): void {
+    if (!this.Myself) {
+      Bus.$emit('TellMySister', '现在你就是主角！');
+    } else {
+      Bus.$emit('TellMySister', '想看看大家的的数据吗？');
+    }
     this.Myself = !this.Myself;
   }
   private closeList(): void {
+    if (!this.isClose) {
+      Bus.$emit('TellMySister', '数据列表已经收起来咯~');
+    }
     this.isClose = !this.isClose;
   }
   private getJobColor(job: string): string {
@@ -183,11 +191,14 @@ export default class Home extends Vue {
     return height;
   }
   private toConfig(): void {
+    Bus.$emit('TellMySister', '这里可以自定设置呢。');
     this.$router.push('config');
   }
   private mounted(): void {
     // this.data = mockdata; // 测试用数据
-    // this.TellMySister();
+    // this.$nextTick(() => {
+    //   this.TellMySister();
+    // });
     document.addEventListener('onOverlayDataUpdate', (act) => {
       this.updateTemplate(act);
     });
@@ -219,6 +230,7 @@ export default class Home extends Vue {
     0 -1px 3px #664710;
 }
 .home {
+  max-width: 200px;
   min-height: 50px;
   position: relative;
   white-space:nowrap;
@@ -230,7 +242,8 @@ export default class Home extends Vue {
   margin: 3px 0 0 0;
   padding: 0;
   position: absolute;
-  top: 0;right: 0;
+  top: 0;
+  left: 3px;
   font-size: 12px;
   z-index: 10;
   li {
@@ -379,13 +392,13 @@ export default class Home extends Vue {
         0 -1px 3px #eeeeee;
     .dc-pct {
       .direct {
-        color: #757575;
+        color: #333333;
       }
       .crit {
-        color: #5c5b5b;
+        color: #333333;
       }
       .directCrit {
-        color: #363636;
+        color: #333333;
       }
     }
   }

@@ -43,6 +43,9 @@ a {
   color: @dmgtext;
   text-decoration: none;
 }
+.config-page {
+  max-width: 200px;
+}
 .waiting {
   display: block;
   text-shadow: -1px 0 3px #664710, 0 1px 3px #664710, 1px 0 3px #664710,
