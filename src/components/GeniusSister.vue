@@ -6,14 +6,23 @@
         <div v-if="talk === ''">
           <span v-if="message.currentArea === ''">并没有战斗数据呀~</span>
           <div v-else>
-            <span>在『{{ message.currentArea }}』战斗了{{ message.time }}</span>
-            <div>团队秒伤是 {{ message.totalDps }}</div>
-            <div>你的秒伤是 {{ message.youDps }}</div>
+            <span>
+              在<font style="color: #dd7d00;">『{{ message.currentArea }}』</font>
+              战斗了<font style="color: #0072dd;">{{ message.time }}</font></span>
+            <div>
+              <span>
+                团队秒伤是 <font style="color: #dd00d2;">{{ message.totalDps }}</font>
+              </span>
+              <span style="float: right;">
+                你的秒伤是 <font style="color: #dd0000;">{{ message.youDps }}</font>
+              </span>
+            </div>
+            <div></div>
           </div>
         </div>
       </div>
     </transition>
-    <canvas id="live2d" width="280" height="240" class="live2d" @click="setTouchTalk"></canvas>
+    <canvas id="live2d" width="300" height="240" class="live2d" @click="setTouchTalk"></canvas>
     <ul id="tools" class="tools" v-show="showTools">
       <li class="tool-item" id="state" @click="viewState">战斗</li>
       <li class="tool-item" id="chat" @click="setChatTalk">闲话</li>
@@ -26,8 +35,8 @@
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import { State, Action, namespace } from 'vuex-class';
 import { debounce } from '../util/index';
+import Bus from '../util/eventBus';
 const ModuleShowConfigs = namespace('showConfigs');
-const ModuleGeniusSister = namespace('geniusSister');
 const quotations = [
   '干嘛呢你，快把手拿开！',
   '你看到过我的小熊吗？',
@@ -74,7 +83,9 @@ const wellKnownSaying = [
 @Component
 export default class GeniusSister extends Vue {
   @ModuleShowConfigs.State((state) => state.showConfigs) private showConfigs: any;
-  @ModuleGeniusSister.State((state) => state.message) private message: any;
+  private message: any = {
+    currentArea: ''
+  };
   private talk: string = '';
   private showTools: boolean = false;
   private showMessage: boolean = false;
@@ -158,6 +169,14 @@ export default class GeniusSister extends Vue {
     const index = (Math.random() * wellKnownSaying.length) | 0;
     this.showTalk(wellKnownSaying[index]);
   }
+  private created() {
+    Bus.$on('changeMessage', (message) => {
+      this.message = message;
+    });
+    Bus.$on('TellMySister', (talk) => {
+      this.showTalk(talk);
+    });
+  }
   private mounted() {
     // 将live2d的素材全部转移到对象存储OSS上。github的下载速度感人。
     (window as any).loadlive2d('live2d', 'https://beauitfytempllate.oss-cn-hangzhou.aliyuncs.com/model.json');
@@ -170,11 +189,12 @@ export default class GeniusSister extends Vue {
 </script>
 
 <style lang='less'>
+@s: #dd0000;
 #landlord {
   position: fixed;
   bottom: 0;
-  z-index: -1;
   font-size: 0;
+  z-index: 1;
   transition: all 0.3s ease-in-out;
 }
 .tools {
@@ -204,23 +224,29 @@ export default class GeniusSister extends Vue {
 .message {
   padding: 4px 12px;
   width: 240px;
-  height: 55px;
   top: -50px;
   left: 10px;
   color: #505050;
   border: 2px solid #333333;
   background-color: rgba(255, 255, 255);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 400;
-  text-overflow: ellipsis;
-  overflow: hidden;
   position: absolute;
-  z-index: -2;
   animation-delay: 0s;
   animation-duration: 50s;
   animation-iteration-count: infinite;
   animation-name: shake;
   animation-timing-function: ease-in-out;
+  &::before {
+    content: '';
+    position: absolute;
+    display: block;
+    width: 0px;
+    height: 0px;
+    bottom: -16px;
+    border: solid 8px;
+    border-color: #333333 #333333 transparent transparent;
+  }
 }
 @keyframes shake {
     2% {
