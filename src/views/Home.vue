@@ -81,31 +81,9 @@ import Damage from '../components/Damage.vue';
 import BattleDetail from '../components/BattleDetail.vue';
 import mockdata from '../assets/data';
 import Bus from '../util/eventBus';
+import { Detail, ActDetail, People, Combatants, Message } from '../interface/index';
 const ModuleShowConfigs = namespace('showConfigs');
 
-interface Detail {
-  Encounter: object;
-  Combatant: object;
-  isActive: boolean;
-}
-interface ActDetail {
-  detail: Detail;
-}
-interface People {
-  name?: string;
-  ENCDPS?: string;
-  maxhit?: string;
-  deaths?: string;
-  damageP?: string;
-  crithitP?: string;
-  DirectHitPct?: string;
-  CritDirectHitPct?: string;
-  'crithit%'?: string;
-  'damage%': string;
-}
-interface Combatants {
-  [key: string]: People;
-}
 @Component({
   components: {
     Damage,
@@ -114,7 +92,11 @@ interface Combatants {
 })
 export default class Home extends Vue {
   private data: Detail = {
-    Encounter: {},
+    Encounter: {
+      CurrentZoneName: '',
+      duration: '',
+      ENCDPS: '',
+    },
     Combatant: {},
     isActive: false,
   };
@@ -150,13 +132,13 @@ export default class Home extends Vue {
     });
   }
   private TellMySister(): void {
-    const { data } = this;
+    const battleMessage = this.data;
     const you = 'YOU';
-    const youDps = (data.Combatant as any)[you].ENCDPS;
-    const message = {
-      currentArea: (data.Encounter as any).CurrentZoneName,
-      time: (data.Encounter as any).duration,
-      totalDps: (data.Encounter as any).ENCDPS,
+    const youDps = battleMessage.Combatant[you].ENCDPS || '0';
+    const message: Message = {
+      currentArea: battleMessage.Encounter.CurrentZoneName,
+      time: battleMessage.Encounter.duration,
+      totalDps: battleMessage.Encounter.ENCDPS,
       youDps,
     };
     Bus.$emit('changeMessage', message);
@@ -195,10 +177,10 @@ export default class Home extends Vue {
     this.$router.push('config');
   }
   private mounted(): void {
-    // this.data = mockdata; // 测试用数据
-    // this.$nextTick(() => {
-    //   this.TellMySister();
-    // });
+    this.data = mockdata; // 测试用数据
+    this.$nextTick(() => {
+      this.TellMySister();
+    });
     document.addEventListener('onOverlayDataUpdate', (act) => {
       this.updateTemplate(act);
     });

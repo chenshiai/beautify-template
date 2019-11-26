@@ -8,11 +8,7 @@
 
 <script lang="ts">
 import { Vue, Prop, Component, Watch } from 'vue-property-decorator';
-interface Encounter {
-  CurrentZoneName: string;
-  duration: string;
-  ENCDPS: string;
-}
+import { Encounter } from '../interface/index';
 
 @Component
 export default class BattleDetail extends Vue {

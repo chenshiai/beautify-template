@@ -26,6 +26,7 @@
     <ul id="tools" class="tools" v-show="showTools">
       <li class="tool-item" id="state" @click="viewState">战斗</li>
       <li class="tool-item" id="chat" @click="setChatTalk">闲话</li>
+      <li class="tool-item" id="close" @click="closeSister">离开</li>
       <li class="tool-item" id="abort">关于</li>
     </ul>
   </div>
@@ -35,7 +36,9 @@
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import { State, Action, namespace } from 'vuex-class';
 import { debounce } from '../util/index';
+import { Message } from '../interface/index';
 import Bus from '../util/eventBus';
+
 const ModuleShowConfigs = namespace('showConfigs');
 const quotations = [
   '干嘛呢你，快把手拿开！',
@@ -83,8 +86,13 @@ const wellKnownSaying = [
 @Component
 export default class GeniusSister extends Vue {
   @ModuleShowConfigs.State((state) => state.showConfigs) private showConfigs: any;
-  private message: any = {
-    currentArea: ''
+  @ModuleShowConfigs.Action('changeShowConfigs') private changeShowConfigs!: (params: object) => void;
+
+  private message: Message = {
+    currentArea: '',
+    time: '',
+    totalDps: '',
+    youDps: '',
   };
   private talk: string = '';
   private showTools: boolean = false;
@@ -105,6 +113,10 @@ export default class GeniusSister extends Vue {
           }
           case 'chat': {
             this.showTalk('猜猜我要说些什么~');
+            break;
+          }
+          case 'close': {
+            this.showTalk('要和我说再见了吗？');
             break;
           }
           case 'abort': {
@@ -158,28 +170,35 @@ export default class GeniusSister extends Vue {
     this.showTalk('');
   }
   private setTouchTalk(): void {
-    const index = (Math.random() * quotations.length) | 0;
+    const index = Math.floor(Math.random() * quotations.length);
     this.showTalk(quotations[index]);
+  }
+  private closeSister(e: any) {
+    const params = {
+      status: false,
+      label: '天才妹妹',
+    };
+    this.changeShowConfigs(params);
   }
   private setChatTalk(): void {
     // 下面是一个毒鸡汤的接口，访问一次就可以得到一句毒鸡汤
     // fetch('https://api.tryto.cn/djt/text').then((res) => res.json()).then((res) => {
     //   this.showTalk(res.data.content);
     // });
-    const index = (Math.random() * wellKnownSaying.length) | 0;
+    const index = Math.floor(Math.random() * wellKnownSaying.length);
     this.showTalk(wellKnownSaying[index]);
   }
   private created() {
-    Bus.$on('changeMessage', (message) => {
+    Bus.$on('changeMessage', (message: Message) => {
       this.message = message;
     });
-    Bus.$on('TellMySister', (talk) => {
+    Bus.$on('TellMySister', (talk: string) => {
       this.showTalk(talk);
     });
   }
   private mounted() {
     // 将live2d的素材全部转移到对象存储OSS上。github的下载速度感人。
-    (window as any).loadlive2d('live2d', 'https://beauitfytempllate.oss-cn-hangzhou.aliyuncs.com/model.json');
+    (window as any).loadlive2d('live2d', 'https://beauitfytempllate.oss-cn-hangzhou.aliyuncs.com/model2.json');
     this.initEventListener();
     setTimeout(() => {
       this.showTalk('啦哩吼~~！');
@@ -194,7 +213,7 @@ export default class GeniusSister extends Vue {
   position: fixed;
   bottom: 0;
   font-size: 0;
-  z-index: 1;
+  z-index: 10;
   transition: all 0.3s ease-in-out;
 }
 .tools {

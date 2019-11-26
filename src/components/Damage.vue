@@ -6,15 +6,8 @@
 // dps数据动态效果组件
 import { Vue, Prop, Component, Watch } from 'vue-property-decorator';
 import { CountUp } from '../util/countUp.min.js';
-interface CountUpType {
-  startVal: number;
-  duration: number;
-  useGrouping: boolean;
-}
-interface CountObject {
-  update: (value: number) => void;
-  start: () => void;
-}
+import { CountObject, CountUpType } from '../interface/index';
+
 @Component
 export default class Demage extends Vue {
   @Prop({ default: '' }) private ENCDPS!: string;

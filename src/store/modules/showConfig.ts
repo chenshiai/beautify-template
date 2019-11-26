@@ -1,4 +1,5 @@
 import { Commit, Mutation } from 'vuex';
+import { setCookie } from '../../util/index';
 const state: any = {
   showConfigs: {
     playname: {
@@ -51,6 +52,7 @@ const mutations: any = {
         break;
       }
     }
+    setCookie('configs', JSON.stringify(states.showConfigs));
   },
   setShowConfigs(states: any, params: any) {
     states.showConfigs = Object.assign(states.showConfigs, params);

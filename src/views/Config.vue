@@ -32,7 +32,6 @@ export default class Config extends Vue {
       label: e.target.name,
     };
     this.changeShowConfigs(params);
-    setCookie('configs', JSON.stringify(this.showConfigs));
   }
 }
 </script>
