@@ -177,10 +177,10 @@ export default class Home extends Vue {
     this.$router.push('config');
   }
   private mounted(): void {
-    this.data = mockdata; // 测试用数据
-    this.$nextTick(() => {
-      this.TellMySister();
-    });
+    // this.data = mockdata; // 测试用数据
+    // this.$nextTick(() => {
+    //   this.TellMySister();
+    // });
     document.addEventListener('onOverlayDataUpdate', (act) => {
       this.updateTemplate(act);
     });
