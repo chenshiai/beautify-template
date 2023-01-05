@@ -27,16 +27,16 @@ const state: any = {
       label: '死亡次数',
     },
     direct: {
-      status: false,
-      label: '直击概率',
+      status: true,
+      label: '直击率(蓝)',
     },
     crit: {
-      status: false,
-      label: '暴击概率',
+      status: true,
+      label: '暴击率(黄)',
     },
     dirctAcrit: {
-      status: false,
-      label: '直暴概率',
+      status: true,
+      label: '直暴率(绿)',
     },
     geniussister: {
       status: false,

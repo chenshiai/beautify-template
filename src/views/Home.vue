@@ -30,7 +30,7 @@
               <use xlink:href='#sex' class="border-sex" />
               <use xlink:href='#sex' class="sex-percent" :clip-path="`url(#sex-mask${index})`" mask="url(#Mask)"/>
             </svg>
-            <img class='job' :src="`../dist/icons/${item.Job.toLowerCase()}.png`" /> 
+            <img class='job' :src="`../dist/icons/${item.Job.toLowerCase()}-large.png`" /> 
           </div>
           <div class='play-detail'>
             <div class='name'>
@@ -110,18 +110,18 @@ export default class Home extends Vue {
   get combtants(): People[] {
     const list: People[] = [];
     const { Combatant } = this.data;
-    Object.keys(Combatant).some((item: string) => {
-      if (this.Myself) {
-        const you = 'YOU'; // tslint不允许通过字符串文本访问对象
-        list.push((Combatant as Combatants)[you]);
-        return true;
-      }
+    Object.keys(Combatant).forEach((item: string) => {
       (Combatant as Combatants)[item].crithitP = (Combatant as Combatants)[item]['crithit%'];
       (Combatant as Combatants)[item].damageP = (Combatant as Combatants)[item]['damage%'];
       list.push((Combatant as Combatants)[item]);
     });
     if (list.length > 0 ) {
       this.TopDamage = list[0].damageP;
+    }
+    // 查看个人 返回个人数据
+    if (this.Myself) {
+      const you = 'YOU'; // tslint不允许通过字符串文本访问对象
+      return [(Combatant as Combatants)[you]];
     }
     return list;
   }
@@ -170,7 +170,7 @@ export default class Home extends Vue {
   }
   private getPercentNumber(percent: string): number {
     const height = 56 * parseInt(percent, 10) / parseInt((this.TopDamage as string), 10);
-    return height;
+    return height || 100;
   }
   private toConfig(): void {
     Bus.$emit('TellMySister', '这里可以自定设置呢。');
@@ -279,6 +279,7 @@ export default class Home extends Vue {
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
+      width: 20px;
     }
   }
   .play-detail {
@@ -287,10 +288,10 @@ export default class Home extends Vue {
     color: #fff;
     padding: 2px;
     line-height: 1;
-    text-shadow: -1px 0 3px #664710, 0 1px 3px #664710, 1px 0 3px #664710,
-      0 -1px 3px #664710;
+    text-shadow: -1px 0 1px #664710, 0 1px 1px #664710, 1px 0 1px #664710,
+      0 -1px 1px #664710;
     .name {
-      font-size: 14px;
+      font-size: 12px;
     }
     
     .encdps {

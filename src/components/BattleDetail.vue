@@ -1,7 +1,7 @@
 <template>
   <div class="battle-detail">
-    <span>{{ encounter.ENCDPS }}</span>
     <span>{{ encounter.duration }}</span>
+    <p><span>{{ encounter.ENCDPS }}·团队DPS</span></p>
     <p><span>{{ encounter.CurrentZoneName }}</span></p>
   </div>
 </template>
