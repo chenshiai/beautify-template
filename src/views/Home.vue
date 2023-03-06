@@ -30,7 +30,7 @@
               <use xlink:href='#sex' class="border-sex" />
               <use xlink:href='#sex' class="sex-percent" :clip-path="`url(#sex-mask${index})`" mask="url(#Mask)"/>
             </svg>
-            <img class='job' :src="`../dist/icons/${item.Job.toLowerCase()}-large.png`" /> 
+            <img class='job' :src="getJobIconUrl(item.Job)" /> 
           </div>
           <div class='play-detail'>
             <div class='name'>
@@ -167,6 +167,9 @@ export default class Home extends Vue {
     } else {
       return 'other-color';
     }
+  }
+  private getJobIconUrl(job: string): string {
+    return `../dist/icons/${job.toLowerCase()}-large.png`;
   }
   private getPercentNumber(percent: string): number {
     const height = 56 * parseInt(percent, 10) / parseInt((this.TopDamage as string), 10);

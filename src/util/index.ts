@@ -18,9 +18,10 @@ const Dps = [
   'nin',
   'dnc',
   'bum',
+  'rpr',
 ];
 const Tank = ['drk', 'gla', 'gld', 'mrd', 'pld', 'war', 'gnb'];
-const Heal = ['ast', 'cnj', 'sch', 'whm'];
+const Heal = ['ast', 'cnj', 'sch', 'whm', 'sge'];
 const Prd = [
   'alc',
   'arm',
